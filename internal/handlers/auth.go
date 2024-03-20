@@ -66,6 +66,7 @@ func (h *authHandler) HandleCreateAccount(w http.ResponseWriter, r *http.Request
 		Name: "jwt",
 		Value: token,
 		HttpOnly: true,
+		MaxAge: 30 * 24 * 60 * 60,
 	}
 
 	http.SetCookie(w, cookie)
@@ -113,6 +114,7 @@ func (h *authHandler) HandleLoginAccount(w http.ResponseWriter, r *http.Request)
 		Name: "jwt",
 		Value: token,
 		HttpOnly: true,
+		MaxAge: 30 * 24 * 60 * 60,
 	}
 
 	http.SetCookie(w, cookie)
@@ -122,6 +124,8 @@ func (h *authHandler) HandleLoginAccount(w http.ResponseWriter, r *http.Request)
 
 func (h *authHandler) HandleAuthenticate(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("jwt")
+	
+	fmt.Println("cookie", cookie)
 
 	if err != nil {
 		return
@@ -134,6 +138,7 @@ func (h *authHandler) HandleAuthenticate(w http.ResponseWriter, r *http.Request)
 		w.WriteHeader(400)
 		return
 	}
+
 
 	claims := token.Claims.(jwt.MapClaims)
 
