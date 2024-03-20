@@ -110,56 +110,32 @@ func FindHigherFlush(cards []string, players []PokerPlayer) []int {
 
 }
 
-func IsFlushRoyal(card1, card2 string, deck []string) string {
+func IsFlushRoyal(card1, card2 string, deck []string) bool {
 
-	res := []string{}
+	res := IsStraightFlush(card1, card2, deck)
 
+	if !res {
+		return res
+	} else {
 
-	IsFlushRoyal := "flush-royal"
+		
 
-	lowCardsAmount := 0
+		cards := []int{CardValue(card1), CardValue(card2), CardValue(deck[0]), CardValue(deck[1]), CardValue(deck[2]), CardValue(deck[3]), CardValue(deck[4])}
 
-	if CardValue(card1) > 1 && CardValue(card1) < 10 && CardValue(card2) > 1 && CardValue(card2) < 10  {
-		return ""
-	}
+		sort.Slice(cards, func(i, j int) bool { return cards[i] < cards[j] })
 
-	if CardValue(card1) == 1 || CardValue(card1) >= 10 {
-		res = append(res, card1)
-	}
+		if cards[6] == 13 && cards[5] == 12 && cards[4] == 11 && cards[3] == 10 && cards[0] == 1 {
 
-	if CardValue(card2) == 1 || CardValue(card2) >= 10 {
-		res = append(res, card2)
-	}
-
-
-	for _, p := range deck {
-
-		if lowCardsAmount > 2 {
-			return ""
-		}
-
-		if CardValue(p) == 1 || CardValue(p) > 10 {
-			
-			res = append(res, p)
-		}
-
-	} 
-
-	if len(res) < 5 {
-		return ""
-	}
-
-	flushSuit := CardSuit(res[0])
-
-	for _, p := range res {
-
-		if CardSuit(p) != flushSuit {
-			return ""
-		}
+			return true
+	
+		}	
 
 	}
 
-	return IsFlushRoyal
+	
+
+	return false
+
 }
 
 func IsStraight(card1, card2 string, deck []string) bool {
@@ -977,7 +953,7 @@ func DetermineWhosHandHigher(cards []string, players []PokerPlayer) []int {
 
 		fmt.Println("checking player", i)
 
-		if v := IsFlushRoyal(p.Hand[0], p.Hand[1], cards); v == "flush-royal" {
+		if v := IsFlushRoyal(p.Hand[0], p.Hand[1], cards); v {
 			r.FlushRoyal = append(r.FlushRoyal, p.ID)
 			return r.FlushRoyal
 		}

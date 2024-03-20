@@ -2,7 +2,7 @@ package tests
 
 import (
 	"testing"
-	"github.com/Toront0/poker/internal/card_combos"
+	"github.com/Toront0/poker/internal/types/game"
 
 )
 
@@ -13,7 +13,7 @@ func TestIsStraightFlush(t *testing.T) {
 
 	tableCards := []string{"3spades", "4spades", "5spades", "6spades", "10hearts"} 
 
-	res := card_combos.IsStraightFlush(card1, card2, tableCards)
+	res := game.IsStraightFlush(card1, card2, tableCards)
 
 	if !res {
 

@@ -20,6 +20,7 @@ func NewUserProfileHandler(store services.UserProfileStorer) *userProfileHandler
 	}
 }
 
+
 func (h *userProfileHandler) HandleGetAllImages(w http.ResponseWriter, r *http.Request) {
 
 	imgs, err := h.store.GetAllProfileImages()

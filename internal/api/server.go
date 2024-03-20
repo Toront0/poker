@@ -4,7 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	
 	"github.com/Toront0/poker/internal/handlers"
-	// "github.com/Toront0/poker/internal/handlers/actualGame"
+
 	"github.com/Toront0/poker/internal/handlers/roomHandler"
 	"github.com/Toront0/poker/internal/services"
 
@@ -13,8 +13,6 @@ import (
 	"context"
 	"net/http"
 	"log"
-	"time"
-	"encoding/json"
 )
 
 
@@ -85,22 +83,6 @@ func (s *server) Run() {
 	mux.Get("/start-game", func (w http.ResponseWriter, r *http.Request) {
 
 		gameLobbyHandler.HandleStartActualGame(w, r, mux, actualGameStore)
-
-	})
-
-	mux.Get("/test", func(w http.ResponseWriter, r *http.Request) {
-
-		time.Sleep(time.Second * 5)
-
-
-		json.NewEncoder(w).Encode("Hello")
-
-
-	})
-
-	mux.Get("/test-2", func(w http.ResponseWriter, r *http.Request) {
-
-		json.NewEncoder(w).Encode("Hello 2")
 
 	})
 

@@ -1,4 +1,4 @@
-package game
+package tests
 
 import (
 	"testing"
@@ -19,8 +19,8 @@ func TestDestributeChipsAfterRound(t *testing.T) {
 
 	g.DestributeChipsAfterRound()
 
-	if g.ID != 10 {
-		t.Errorf("TestDestributeChipsAfterRound Failed. Got %v, want %v", g, []int{})
+	if g.Players[1].Chips != 60000 {
+		t.Errorf("TestDestributeChipsAfterRound Failed. Got %d, want %d", g.Players[1].Chips, 60000)
 	}
 
 }

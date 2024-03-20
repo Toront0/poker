@@ -2,7 +2,7 @@ package tests
 
 import (
 	"testing"
-	"github.com/Toront0/poker/internal/card_combos"
+	"github.com/Toront0/poker/internal/types/game"
 
 )
 
@@ -13,7 +13,7 @@ func TestIsPair(t *testing.T) {
 
 	tableCards := []string{"10diamonds", "12spades", "13spades", "5spades", "1spades"} 
 
-	res := card_combos.IsPair2(card1, card2, tableCards)
+	res := game.IsPair2(card1, card2, tableCards)
 
 
 	if !res {

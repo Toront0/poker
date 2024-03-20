@@ -2,7 +2,7 @@ package tests
 
 import (
 	"testing"
-	"github.com/Toront0/poker/internal/card_combos"
+	"github.com/Toront0/poker/internal/types/game"
 
 )
 
@@ -13,7 +13,7 @@ func TestIsSet(t *testing.T) {
 
 	tableCards := []string{"10diamonds", "12spades", "13spades", "5spades", "10hearts"} 
 
-	res := card_combos.IsSet2(card1, card2, tableCards)
+	res := game.IsSet2(card1, card2, tableCards)
 
 	if !res {
 
@@ -28,9 +28,9 @@ func TestFindHigherSet(t *testing.T) {
 
 	cards := []string{"2diamonds", "5clubs", "13clubs", "13hearts", "5diamonds"}
 
-	players := []card_combos.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"1spades", "13clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"12spades", "13clubs"}, false, 0, "", 0, ""}}
+	players := []game.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"1spades", "13clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"12spades", "13clubs"}, false, 0, "", 0, ""}}
 
-	res := card_combos.FindHigherSet(cards, players)
+	res := game.FindHigherSet(cards, players)
 
 
 	if len(res) > 0 {

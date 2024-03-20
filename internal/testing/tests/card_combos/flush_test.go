@@ -2,7 +2,7 @@ package tests
 
 import (
 	"testing"
-	"github.com/Toront0/poker/internal/card_combos"
+	"github.com/Toront0/poker/internal/types/game"
 
 )
 
@@ -13,7 +13,7 @@ func TestIsFlush(t *testing.T) {
 
 	tableCards := []string{"11diamonds", "12spades", "13spades", "5spades", "1spades"} 
 
-	res := card_combos.IsFlush(card1, card2, tableCards)
+	res := game.IsFlush(card1, card2, tableCards)
 
 	if !res {
 
@@ -25,10 +25,10 @@ func TestIsFlush(t *testing.T) {
 func TestFindHigherFlush(t *testing.T) {
 	cards := []string{"10clubs", "3clubs", "12clubs", "10hearts", "7clubs"}
 
-	players := []card_combos.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"2spades", "7clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"2spades", "4clubs"}, false, 0, "", 0, ""}}
+	players := []game.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"2spades", "7clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"2spades", "4clubs"}, false, 0, "", 0, ""}}
 
 
-	res := card_combos.FindHigherFlush(cards, players)
+	res := game.FindHigherFlush(cards, players)
 
 	if res[0] != 8  {
 		t.Errorf("TestFindHigherFlush Test failed - got: %v, want: %d", res, 8)
@@ -39,10 +39,10 @@ func TestFindHigherFlush(t *testing.T) {
 func TestFindHigherFlushWithAce(t *testing.T) {
 	cards := []string{"10clubs", "3clubs", "12clubs", "10hearts", "7clubs"}
 
-	players := []card_combos.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"2spades", "7clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"2spades", "1clubs"}, false, 0, "", 0, ""}}
+	players := []game.PokerPlayer{{8, "toronto", 10000, "", "waiting", "", 10, 10, []string{"2spades", "7clubs"}, true, 0, "", 0, ""}, {6, "admin", 50000, "", "waiting", "", 10, 10, []string{"2spades", "1clubs"}, false, 0, "", 0, ""}}
 
 
-	res := card_combos.FindHigherFlush(cards, players)
+	res := game.FindHigherFlush(cards, players)
 
 	if res[0] != 6  {
 		t.Errorf("TestFindHigherFlush Test failed - got: %v, want: %d", res, 1)
