@@ -67,6 +67,7 @@ func (h *authHandler) HandleCreateAccount(w http.ResponseWriter, r *http.Request
 		Value: token,
 		HttpOnly: true,
 		MaxAge: 30 * 24 * 60 * 60,
+		Expires: time.Date(2030, time.November, 10, 23, 0, 0, 0, time.UTC),
 	}
 
 	http.SetCookie(w, cookie)
@@ -115,6 +116,7 @@ func (h *authHandler) HandleLoginAccount(w http.ResponseWriter, r *http.Request)
 		Value: token,
 		HttpOnly: true,
 		MaxAge: 30 * 24 * 60 * 60,
+		Expires: time.Date(2030, time.November, 10, 23, 0, 0, 0, time.UTC),
 	}
 
 	http.SetCookie(w, cookie)
