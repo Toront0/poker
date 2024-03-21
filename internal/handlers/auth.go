@@ -62,12 +62,13 @@ func (h *authHandler) HandleCreateAccount(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	expires := time.Now().AddDate(1, 0, 0)
+
 	cookie := &http.Cookie{
 		Name: "jwt",
 		Value: token,
 		HttpOnly: true,
-		MaxAge: 30 * 24 * 60 * 60,
-		Expires: time.Date(2030, time.November, 10, 23, 0, 0, 0, time.UTC),
+		Expires: expires,
 		Secure: true,
 	}
 
@@ -112,12 +113,13 @@ func (h *authHandler) HandleLoginAccount(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	expires := time.Now().AddDate(1, 0, 0)
+
 	cookie := &http.Cookie{
 		Name: "jwt",
 		Value: token,
 		HttpOnly: true,
-		MaxAge: 30 * 24 * 60 * 60,
-		Expires: time.Date(2030, time.November, 10, 23, 0, 0, 0, time.UTC),
+		Expires: expires,
 		Secure: true,
 	}
 
