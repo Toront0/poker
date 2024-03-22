@@ -13,6 +13,7 @@ type User struct {
 	BannerImg string `json:"bannerImg"`
 	MoneyTransaction time.Time `json:"moneyTransaction"`
 	Money int `json:"money"`
+	VipFinishedAt *time.Time `json:"vipFinishedAt"`
 }
 
 type ProfileImg struct {
@@ -26,6 +27,7 @@ type UserDetail struct {
 	Username string `json:"username"`
 	ProfileImg string `json:"profileImg"`
 	BannerImg string `json:"bannerImg"`
+	IsVip *bool `json:"isVip"`
 }
 
 type FoundUser struct {

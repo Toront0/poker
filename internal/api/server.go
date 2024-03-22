@@ -97,6 +97,7 @@ func (s *server) Run() {
 	mux.Get("/user-games/{id}", userProfileHandler.HandleGetUserGames)
 	mux.Get("/money-status/{id}", userProfileHandler.HandleCheckPossibilityToGetMoney)
 	mux.Get("/get-money/{id}", userProfileHandler.HandleGetFreeMoney)
+	mux.Post("/subscribe", userProfileHandler.HandleSubscribe)
 
 
 	http.ListenAndServe(s.listenAddr, mux)

@@ -70,6 +70,7 @@ func (h *authHandler) HandleCreateAccount(w http.ResponseWriter, r *http.Request
 		HttpOnly: true,
 		Expires: expires,
 		Secure: true,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	http.SetCookie(w, cookie)

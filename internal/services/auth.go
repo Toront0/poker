@@ -44,9 +44,9 @@ func (s *authStore) CreateUser(username, email, password string) (*types.User, e
 func (s *authStore) GetUserBy(columnName string, value interface{}) (*types.User, error) {
 	acc := &types.User{}
 
-	query := fmt.Sprintf("select id, created_at, username, email, password, is_verified, profile_img, banner_img, money from users where %s = $1", columnName)
+	query := fmt.Sprintf("select id, created_at, username, email, password, is_verified, profile_img, banner_img, money, (select finished_at from vip_subscriptions where user_id = t1.id) from users t1 where %s = $1", columnName)
 
-	err := s.conn.QueryRow(context.Background(), query, value).Scan(&acc.ID, &acc.CreatedAt, &acc.Username, &acc.Email, &acc.Password, &acc.IsVerified, &acc.ProfileImg, &acc.BannerImg, &acc.Money)
+	err := s.conn.QueryRow(context.Background(), query, value).Scan(&acc.ID, &acc.CreatedAt, &acc.Username, &acc.Email, &acc.Password, &acc.IsVerified, &acc.ProfileImg, &acc.BannerImg, &acc.Money, &acc.VipFinishedAt)
 
 	if err != nil {
 		fmt.Printf("could not get an user %s", err)

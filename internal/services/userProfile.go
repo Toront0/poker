@@ -16,6 +16,7 @@ type UserProfileStorer interface {
 	GetUserGames(userID , limit, page int) (*types.UserGames, error)
 	GetLastMoneyTransactionStatus(userID int) (time.Time, error)
 	GetFreeMoney(userID int) error
+	InsertSubscription(userID int, finishedAt time.Time) error
 }
 
 type userProfileStore struct {
@@ -58,8 +59,7 @@ func (s *userProfileStore) ChangeProfileImage(userID int, url string) error {
 func (s *userProfileStore) GetUserByID(userID int) (*types.UserDetail, error) {
 	u := &types.UserDetail{}
 
-	err := s.store.QueryRow(context.Background(), `select id, created_at, username, profile_img, banner_img from users where id = $1`, userID).Scan(&u.ID, &u.CreatedAt, &u.Username, &u.ProfileImg, &u.BannerImg)
-
+	err := s.store.QueryRow(context.Background(), `select id, created_at, username, profile_img, banner_img, (select (case when id is not null then true else false end) from vip_subscriptions where user_id = t1.id and finished_at > now()) from users t1 where id = $1`, userID).Scan(&u.ID, &u.CreatedAt, &u.Username, &u.ProfileImg, &u.BannerImg, &u.IsVip)
 	if err != nil {
 		return u, err
 	}
@@ -135,6 +135,14 @@ func (s *userProfileStore) GetLastMoneyTransactionStatus(userID int) (time.Time,
 func (s *userProfileStore) GetFreeMoney(userID int) error {
 
 	_, err := s.store.Exec(context.Background(), `update users set money = users.money + 10000, money_transaction = $2 where id = $1`, userID, time.Now())
+
+	return err
+
+}
+
+func (s *userProfileStore) InsertSubscription(userID int, finishedAt time.Time) error {
+
+	_, err := s.store.Exec(context.Background(), `insert into vip_subscriptions (user_id, finished_at) values($1, $2)`, userID, finishedAt)
 
 	return err
 

@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 type userProfileHandler struct {
@@ -186,4 +187,40 @@ func (h *userProfileHandler) HandleGetFreeMoney(w http.ResponseWriter, r *http.R
 		w.WriteHeader(400)
 		return
 	}
+}
+
+func (h *userProfileHandler) HandleSubscribe(w http.ResponseWriter, r *http.Request) {
+	req := &struct {
+		UserID int `json:"userId"`
+		SubscribeDate string `json:"subscribeDate"`
+	} {
+		UserID: 0,
+		SubscribeDate: "",
+	}
+
+	json.NewDecoder(r.Body).Decode(req)
+
+	finishedAt := time.Now().Add(time.Hour * 24 * 30)
+
+	if req.SubscribeDate == "6 month" {
+		finishedAt = time.Now().Add(time.Hour * 24 * 180)
+	}
+
+	if req.SubscribeDate == "year" {
+		finishedAt = time.Now().Add(time.Hour * 24 * 365)
+	}
+
+	
+
+	err := h.store.InsertSubscription(req.UserID, finishedAt)
+
+
+	if err != nil {
+		fmt.Printf("could not insert vip subscription %s", err)
+		w.WriteHeader(400)
+		return
+	}
+
+
+
 }
