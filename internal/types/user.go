@@ -35,3 +35,12 @@ type FoundUser struct {
 	Username string `json:"username"`
 	ProfileImg string `json:"profileImg"`
 }
+
+type AuthUser struct {
+	ID int `json:"id"`
+	Username string `json:"username"`
+	Password string `json:"-"`
+	ProfileImg string `json:"profileImg"`
+	Money int `json:"money"`
+	VipFinishedAt *time.Time `json:"vipFinishedAt"`
+}

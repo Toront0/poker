@@ -9,8 +9,8 @@ import (
 )
 
 type AuthStorer interface {
-	CreateUser(username, email, password string) (*types.User, error)
-	GetUserBy(columnName string, value interface{}) (*types.User, error)
+	CreateUser(username, email, password string) (*types.AuthUser, error)
+	GetUserBy(columnName string, value interface{}) (*types.AuthUser, error)
 	InsertEmailCode(email string, code int) error
 	DeleteCodeIfExist(email string) error
 	VerifyCode(email string, code string) (bool, error)
@@ -27,30 +27,34 @@ func NewAuthStore(conn *pgxpool.Pool) *authStore {
 	}
 }
 
-func (s *authStore) CreateUser(username, email, password string) (*types.User, error) {
-	acc := &types.User{}
+func (s *authStore) CreateUser(username, email, password string) (*types.AuthUser, error) {
+	acc := &types.AuthUser{}
 
-	err := s.conn.QueryRow(context.Background(), `insert into users (username, email, password) values($1, $2, $3) returning *`, username, email, password).Scan(&acc.ID, &acc.CreatedAt, &acc.Email, &acc.Username, &acc.Password, &acc.IsVerified, &acc.ProfileImg)
+	err := s.conn.QueryRow(context.Background(), `insert into users (username, email, password) values($1, $2, $3) returning id, username, profile_img, money`, username, email, password).Scan(&acc.ID, &acc.Username, &acc.ProfileImg, &acc.Money)
+
+	// defaultTime := time.Date(1970, time.January, 1, 23, 0, 0, 0, time.UTC)
+
+	// acc.VipFinishedAt = &defaultTime
 
 	if err != nil {
 		fmt.Printf("could not create the user %s", err)
-		return &types.User{}, err
+		return &types.AuthUser{}, err
 	}
 
 
 	return acc, nil
 }
 
-func (s *authStore) GetUserBy(columnName string, value interface{}) (*types.User, error) {
-	acc := &types.User{}
+func (s *authStore) GetUserBy(columnName string, value interface{}) (*types.AuthUser, error) {
+	acc := &types.AuthUser{}
 
-	query := fmt.Sprintf("select id, created_at, username, email, password, is_verified, profile_img, banner_img, money, (select finished_at from vip_subscriptions where user_id = t1.id) from users t1 where %s = $1", columnName)
+	query := fmt.Sprintf("select id, username, password, profile_img, money, (select finished_at from vip_subscriptions where user_id = t1.id) from users t1 where %s = $1", columnName)
 
-	err := s.conn.QueryRow(context.Background(), query, value).Scan(&acc.ID, &acc.CreatedAt, &acc.Username, &acc.Email, &acc.Password, &acc.IsVerified, &acc.ProfileImg, &acc.BannerImg, &acc.Money, &acc.VipFinishedAt)
+	err := s.conn.QueryRow(context.Background(), query, value).Scan(&acc.ID, &acc.Username, &acc.Password, &acc.ProfileImg, &acc.Money, &acc.VipFinishedAt)
 
 	if err != nil {
 		fmt.Printf("could not get an user %s", err)
-		return &types.User{}, err
+		return &types.AuthUser{}, err
 	}
 
 	return acc, nil
