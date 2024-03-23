@@ -76,9 +76,18 @@ func (s *gameLobbyStore) CreateGame(req *types.CreateGameReq) error {
 	var gameID int 
 
 
-	err := s.store.QueryRow(context.Background(), `insert into games (name, buy_in, amount_of_players, prize, is_private, room_password, auto_start, mode, prize_destribution) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id`, req.Name, req.BuyIn, req.AmountOfPlayers, req.Prize, req.IsPrivate, req.RoomPassword, req.AutoStart, req.Mode, req.PrizeDestribution).Scan(&gameID)
+	err := s.store.QueryRow(context.Background(), `insert into games (name, buy_in, amount_of_players, prize, is_private, room_password, mode, prize_destribution) values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`, req.Name, req.BuyIn, req.AmountOfPlayers, req.Prize, req.IsPrivate, req.RoomPassword, req.Mode, req.PrizeDestribution).Scan(&gameID)
+
+	if err != nil {
+		return err
+	}
 
 	_, err = s.store.Exec(context.Background(), `insert into game_players (player_id, game_id) values($1, $2)`, req.CreatorID, gameID)
+
+	if err != nil {
+		return err
+	}
+
 
 	_, err = s.store.Exec(context.Background(), `update users set money = users.money - $1 where id = $2`, req.BuyIn, req.CreatorID)
 
